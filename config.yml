@@ -1,0 +1,126 @@
+## Hyper parameters
+#hidden_size : 45 # [20, 90]
+#hidden_layer_depth : 2 # [1, 4]
+#latent_length : 20 # [5,20]
+#batch_size : 16 #[1,10]
+#learning_rate : 0.0005 # [0.0001, 0.0005]
+#n_epochs :  1400 #[200, 1500]
+#dropout_rate : 0.2  # [0, 0.2]
+#optimizer : 'Adam'  # options: ADAM, SGD
+#cuda : True  # options: True, False
+#print_every : 30
+#clip : True  # options: True, False
+#max_grad_norm : 5
+#loss : 'SmoothL1Loss'  # options: SmoothL1Loss, MSELoss
+#block : 'LSTM'  # options: LSTM, GRU
+## Mutual information based score
+#batch_size: 16
+#block: LSTM
+#clip: true
+#cuda: true
+#dropout_rate: 0.2
+#hidden_layer_depth: 1
+#hidden_size: 128
+#latent_length: 20
+#learning_rate: 0.0005
+#loss: SmoothL1Loss
+#max_grad_norm: 5
+#n_epochs: 1200
+#optimizer: Adam
+#print_every: 60
+
+## Fashion MNIST
+#hidden_size : 90 # [20, 90]
+#hidden_layer_depth : 2 # [1, 4]
+#latent_length : 20 # [5,20]
+#batch_size : 16 #[1,10]
+#learning_rate : 0.0005 # [0.0001, 0.0005]
+#n_epochs :  10 #[200, 1500]
+#dropout_rate : 0.2  # [0, 0.2]
+#optimizer : 'Adam'  # options: ADAM, SGD
+#cuda : True  # options: True, False
+#print_every : 30
+#clip : True  # options: True, False
+#max_grad_norm : 5
+#loss : 'SmoothL1Loss'  # options: SmoothL1Loss, MSELoss
+#block : 'LSTM'  # options: LSTM, GRU
+
+# MNIST
+#hidden_size : 128 # [20, 90]
+#hidden_layer_depth : 2 # [1, 4]
+#latent_length : 20 # [5,20]
+#batch_size : 16 #[1,10]
+#learning_rate : 0.0005 # [0.0001, 0.0005]
+#n_epochs :  10 #[200, 1500]
+#dropout_rate : 0.2  # [0, 0.2]
+#optimizer : 'Adam'  # options: ADAM, SGD
+#cuda : True  # options: True, False
+#print_every : 30
+#clip : True  # options: True, False
+#max_grad_norm : 5
+#loss : 'SmoothL1Loss'  # options: SmoothL1Loss, MSELoss
+#block : 'LSTM'  # options: LSTM, GRU
+
+# CIFAR
+hidden_size : 200 # [20, 90]
+hidden_layer_depth : 2 # [1, 4]
+latent_length : 24 # [5,20]
+batch_size : 16 #[1,10]
+learning_rate : 0.0005 # [0.0001, 0.0005]
+n_epochs :  40000 #[200, 1500]
+dropout_rate : 0.2  # [0, 0.2]
+optimizer : 'Adam'  # options: ADAM, SGD
+cuda : True  # options: True, False
+print_every : 30
+clip : True  # options: True, False
+max_grad_norm : 5
+loss : 'SmoothL1Loss'  # options: SmoothL1Loss, MSELoss
+block : 'LSTM'  # options: LSTM, GRU
+
+# ECG200
+#hidden_size : 128 # [20, 90]
+#hidden_layer_depth : 2 # [1, 4]
+#latent_length : 20 # [5,20]
+#batch_size : 16 #[1,10]
+#learning_rate : 0.0005 # [0.0001, 0.0005]
+#n_epochs :  10 #[200, 1500]
+#dropout_rate : 0.2  # [0, 0.2]
+#optimizer : 'Adam'  # options: ADAM, SGD
+#cuda : True  # options: True, False
+#print_every : 30
+#clip : True  # options: True, False
+#max_grad_norm : 5
+#loss : 'SmoothL1Loss'  # options: SmoothL1Loss, MSELoss
+#block : 'LSTM'  # options: LSTM, GRU
+
+## ECG5000
+#hidden_size : 60 # [20, 90]
+#hidden_layer_depth : 2 # [1, 4]
+#latent_length : 5 # [5,20]
+#batch_size : 16 #[1,10]
+#learning_rate : 0.0005 # [0.0001, 0.0005]
+#n_epochs :  10 #[200, 1500]
+#dropout_rate : 0.2  # [0, 0.2]
+#optimizer : 'Adam'  # options: ADAM, SGD
+#cuda : True  # options: True, False
+#print_every : 30
+#clip : True  # options: True, False
+#max_grad_norm : 5
+#loss : 'SmoothL1Loss'  # options: SmoothL1Loss, MSELoss
+#block : 'LSTM'  # options: LSTM, GRU
+
+## ElectricDevices
+#batch_size: 32
+#block: LSTM
+#clip: true
+#cuda: true
+#dropout_rate: 0.2
+#hidden_layer_depth: 2
+#hidden_size: 45
+#latent_length: 20
+#learning_rate: 0.0005
+#loss: SmoothL1Loss
+#max_grad_norm: 5
+#n_epochs: 1200
+#optimizer: Adam
+#print_every: 60
