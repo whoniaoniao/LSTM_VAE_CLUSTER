@@ -138,9 +138,11 @@ if __name__ == '__main__':
     # Fit the model onto dataset
     config.dload = dload
     vrae_cnn = main(config)
+    # TODO FIT and SAVE
     # vrae_cnn.fit(train_dataset, save=True)
     # vrae_cnn.fit_cnn(trainloader, save=True, cnn_mode=True)
     # vrae_cnn.save('vrae_Cnn.pth')
+    # TODO LOAD
     vrae_cnn.load('./MINST_model_dir/{}/vrae_Cnn.pth'.format(str(Model_Num)))
     # loss = vrae.compute_loss(test_dataset)
     # # Transform the input timeseries to encoded latent vectors

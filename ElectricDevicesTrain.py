@@ -107,36 +107,42 @@ if __name__ == '__main__':
     # # # Transform the input timeseries to encoded latent vectors
     z_run = vrae.transform(test_dataset)
     # # # # Visualize using PCA and tSNE
-    plot_clustering(z_run, y_val, engine='matplotlib', download=True, folder_name=image_save)
-    # # ##Transform the input dataset to encoded latent vectors
-    # z_run_train = vrae.transform(train_dataset, save=False)
-    # labels = y_train[:z_run_train.shape[0]]
-    # clf = svm.SVC()
-    # clf.fit(z_run_train, labels)
-    # y_pred = clf.predict(z_run)
-    # labels_for_z_run = y_train[:z_run.shape[0]]
-    # f1_final_score = f1_score(y_true=labels_for_z_run, y_pred=y_pred, average='weighted')
-    # recall_final_score = recall_score(y_true=labels_for_z_run, y_pred=y_pred, average='weighted')
-    # accuracy_final_score = accuracy_score(y_true=labels_for_z_run, y_pred=y_pred)
-    # precision_final_score = precision_score(y_true=labels_for_z_run, y_pred=y_pred, average='weighted')
-    # print("accuracy of the svm", accuracy_score(labels_for_z_run, y_pred))
-    # print("f1_final_score ", f1_final_score)
-    # print("recall_final_score", recall_final_score)
-    # print("accuracy_final_score", accuracy_final_score)
-    # print("precision_final_score", precision_final_score)
-    # # Visulalizing the input time series vs the Output time series
-    # X_decoded = vrae.reconstruct(test_dataset)
-    # for i in range(100):
-    #     # Plotting test_dataset
-    #     test_data_sample = test_dataset.tensors[0].numpy()[i, :]
-    #     test_data_sample_time_steps = np.arange(0, test_data_sample.shape[0])
-    #     plt.plot(test_data_sample_time_steps, test_data_sample)
-    #     X_decoded_sample = np.squeeze(X_decoded)[:, i]
-    #     X_decoded_sample_time_steps = np.arange(0, X_decoded_sample.shape[0])
-    #     plt.plot(X_decoded_sample_time_steps, X_decoded_sample)
-    #     plt.savefig("./ElectricDevices_model_dir/{}/plots/{}_compare.png".format(str(Model_Num), str(i)))
-    #     plt.show()
-    #     mean_error = np.mean(np.abs(X_decoded_sample - np.squeeze(test_data_sample)))
-    #     # print(mean_error)
-    # print("After")
+    z_run_sep, labels, y_pred_total = plot_clustering(z_run, y_val, engine='matplotlib', download=True,
+                                                      folder_name=image_save)
+    # ##Transform the input dataset to encoded latent vectors
+    z_run_train = vrae.transform(train_dataset, save=False)
+    labels = y_train[:z_run_train.shape[0]]
+    clf = svm.SVC()
+    clf.fit(z_run_train, labels)
+    y_pred = clf.predict(z_run)
+    labels_for_z_run = y_train[:z_run.shape[0]]
+    f1_final_score = f1_score(y_true=labels_for_z_run, y_pred=y_pred, average='weighted')
+    recall_final_score = recall_score(y_true=labels_for_z_run, y_pred=y_pred, average='weighted')
+    accuracy_final_score = accuracy_score(y_true=labels_for_z_run, y_pred=y_pred)
+    precision_final_score = precision_score(y_true=labels_for_z_run, y_pred=y_pred, average='weighted')
+    print("accuracy of the svm", accuracy_score(labels_for_z_run, y_pred))
+    print("f1_final_score ", f1_final_score)
+    print("recall_final_score", recall_final_score)
+    print("accuracy_final_score", accuracy_final_score)
+    print("precision_final_score", precision_final_score)
+    # Visulalizing the input time series vs the Output time series
+    X_decoded = vrae.reconstruct(test_dataset)
+    for i in range(100):
+        # Plotting test_dataset
+        test_data_sample = test_dataset.tensors[0].numpy()[i, :]
+        test_data_sample_time_steps = np.arange(0, test_data_sample.shape[0])
+        plt.plot(test_data_sample_time_steps, test_data_sample)
+        X_decoded_sample = np.squeeze(X_decoded)[:, i]
+        X_decoded_sample_time_steps = np.arange(0, X_decoded_sample.shape[0])
+        plt.plot(X_decoded_sample_time_steps, X_decoded_sample)
+        plt.savefig("./ElectricDevices_model_dir/{}/plots/{}_compare.png".format(str(Model_Num), str(i)))
+        plt.show()
+        mean_error = np.mean(np.abs(X_decoded_sample - np.squeeze(test_data_sample)))
+        # print(mean_error)
+        np.save("data_for_dash/ElectricDevices_test_data_sample.npy", test_data_sample)
+        np.save("data_for_dash/ElectricDevices_X_decoded_sample.npy", X_decoded_sample)
+    print("After")
 
+np.save("data_for_dash/ElectricDevices_labels.npy", labels)
+np.save("data_for_dash/ElectricDevices_y_pred_total.npy", y_pred_total)
+np.save("data_for_dash/ElectricDevices_z_run_sep.npy", z_run_sep)

@@ -16,6 +16,15 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchvision import transforms as tfs
 import pickle
+import dash
+import pandas as pd
+import plotly.graph_objs as go
+import dash_core_components as dcc
+import dash_html_components as html
+
+
+# import plotly.express as px
+
 
 def to_img(x):
     x = (x + 1.) * 0.5
@@ -113,11 +122,11 @@ if __name__ == '__main__':
 
     # Load data and preprocess
     trainset = torchvision.datasets.FashionMNIST(root='./data_2', train=True,
-                                          download=True, transform=transform)
+                                                 download=True, transform=transform)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=config.batch_size,
                                               shuffle=True, num_workers=4)
     testset = torchvision.datasets.FashionMNIST(root='./data_2', train=False,
-                                         download=True, transform=transform)
+                                                download=True, transform=transform)
     testloader = torch.utils.data.DataLoader(testset, batch_size=config.batch_size,
                                              shuffle=False, num_workers=4)
 
@@ -145,7 +154,8 @@ if __name__ == '__main__':
     # # Transform the input timeseries to encoded latent vectors
     z_run, y_val = vrae_cnn.transform(testset, save=True, cnn_mode=True)
     # # Visualize using PCA and tSNE
-    plot_clustering(z_run, y_val, engine='matplotlib', download=True, folder_name=image_save)
+    z_run_sep, y_pred_colors, colors = plot_clustering(z_run, y_val, engine='matplotlib', download=True,
+                                                       folder_name=image_save)
     ##Transform the input dataset to encoded latent vectors
     # z_run_train, y_train = vrae_cnn.transform(trainset, save=False, cnn_mode=True)
     # labels = y_train
@@ -183,7 +193,6 @@ if __name__ == '__main__':
     # plt.show()
     print("After")
 
-
     # X_decoded = X_decoded.reshape(-1, 28, 28)
 
     # # # Plotting
@@ -199,3 +208,126 @@ if __name__ == '__main__':
     #     # imgplot = plt.imshow(X_decoded_sample)
     #     plt.savefig("./FASHION_MINST_model_dir/{}/plots/{}_compare.png".format(str(Model_Num), str(i)))
     #     plt.show()
+########################
+app = dash.Dash()
+
+
+
+#
+#
+ # STYLE 1
+fig_names = ['LSTM_VAE_CLUSTERING', 'LSTM_VAE_GROUNDTRUTH']
+fig_dropdown = html.Div([
+    dcc.Dropdown(
+        id='fig_dropdown',
+        options=[{'label': x, 'value': x} for x in fig_names],
+        value=None
+    )])
+fig_plot = html.Div(id='fig_plot')
+app.layout = html.Div([fig_dropdown, fig_plot])
+
+@app.callback(
+dash.dependencies.Output('fig_plot', 'children'),
+[dash.dependencies.Input('fig_dropdown', 'value')])
+def update_output(fig_name):
+    return name_to_figure(fig_name)
+
+
+
+
+
+def name_to_figure(fig_name):
+    figure = go.Figure()
+    if fig_name == 'LSTM_VAE_CLUSTERING':
+        for i in range(10):
+            figure.add_trace(go.Scatter(x=list(z_run_sep[y_pred_colors == i, 0]),
+                        y=list(z_run_sep[y_pred_colors == i, 1]),
+                        text="class" + str(i),
+                        mode='markers',
+                        opacity=0.7,
+                        marker={
+                            'size': 15,
+                            'line': {'width': 0.5, 'color': 'white'}
+                        },
+                        name=str(i)))
+    elif fig_name == 'LSTM_VAE_GROUNDTRUTH':
+        for i in range(10):
+            figure.add_trace(go.Scatter(x=list(z_run_sep[colors == i, 0]),
+                                        y=list(z_run_sep[colors == i, 1]),
+                                        text="class" + str(i),
+                                        mode='markers',
+                                        opacity=0.7,
+                                        marker={
+                                            'size': 15,
+                                            'line': {'width': 0.5, 'color': 'white'}
+                                        },
+                                        name=str(i)))
+    return dcc.Graph(figure=figure)
+
+app.run_server(debug=True, use_reloader=False)
+
+# STYLE 2
+app.layout = html.Div(children=[
+
+
+    # All elements from the top of the page
+    html.Div([
+        html.H1(children='LSTM_VAE CLUSTERING'),
+
+        html.Div(children='''
+            Clustering Result with KMEAN
+        '''),
+
+        dcc.Graph(
+            id='prediction',
+            figure={
+                'data': [
+                    go.Scatter(
+                        x=list(z_run_sep[y_pred_colors == i, 0]),
+                        y=list(z_run_sep[y_pred_colors == i, 1]),
+                        text="class" + str(i),
+                        mode='markers',
+                        opacity=0.7,
+                        marker={
+                            'size': 15,
+                            'line': {'width': 0.5, 'color': 'white'}
+                        },
+                        name=str(i)
+                    ) for i in range(10)
+                ],
+            }
+        ),
+    ]),
+    # New Div for all elements in the new 'row' of the page
+    html.Div([
+        html.H1(children='LSTM_VAE GROUNDTRUTH'),
+
+        html.Div(children='''
+            ground truth of data
+        '''),
+
+        dcc.Graph(
+            id='ground truth',
+            figure={
+                'data': [
+                    go.Scatter(
+                        x=list(z_run_sep[colors == i, 0]),
+                        y=list(z_run_sep[colors == i, 1]),
+                        text="class" + str(i),
+                        mode='markers',
+                        opacity=0.7,
+                        marker={
+                            'size': 15,
+                            'line': {'width': 0.5, 'color': 'white'}
+                        },
+                        name=str(i)
+                    ) for i in range(10)
+                ],
+
+            }
+        ),
+    ]),
+])
+
+if __name__ == '__main__':
+    app.run_server()
